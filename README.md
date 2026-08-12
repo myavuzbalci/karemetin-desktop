@@ -1,37 +1,35 @@
 # Caption Studio
 
-Windows icin yerel calisan AI altyazi editoru ve video render uygulamasi. Transkripsiyon, medya analizi ve FFmpeg export islemleri internet gerektirmeden yapilir.
+An offline AI subtitle editor and native video renderer for Windows. Transcription, media inspection, and FFmpeg exports run locally without an internet connection.
 
-## Neler Yapar?
+## Features
 
-- `Whisper Large v3 Turbo` ile otomatik, kelime zaman kodlu altyazi olusturur.
-- Altyaziyi video uzerinde surukleyip konumlandirabilir; genislik, hizalama ve segment bazli konum ayarlayabilirsin.
-- Kelime bazinda renk, kontur, arka plan, vurgu ve animasyon uygular.
-- Zaman cizelgesi, ses dalga formu, coklu kelime secimi, segment bolme/birlestirme ve secili bolumu oynatma sunar.
-- Hazir stiller, kullanici stilleri ve tum ayarlari kapsayan kaydedilebilir presetler icerir.
-- Birden fazla ses kanali, ses seviyesi, fade in/out, normalize ve render sirasinda ses miksleme destekler.
-- Kaynak cozunurluk, FPS ve uzantiyi koruyabilir; codec, kalite, ses, en-boy orani ve cikti formatlarini ayarlayabilirsin.
-- Gomulu altyazili video, seffaf MOV, yesil ekran, maske cifti, SRT, TXT, ASS ve duzenlenebilir `.captionstudio` proje dosyasi uretebilir.
-- Toplu video ekleme, sirali transkripsiyon ve sirali export destekler.
+- Creates word-timed subtitles with `Whisper Large v3 Turbo`.
+- Lets you drag captions directly over the video and adjust position, width, alignment, and per-segment placement.
+- Supports per-word color, outline, background, emphasis, and animation styling.
+- Includes a timeline, waveform, multi-word selection, segment split/merge, and selected-range playback.
+- Provides built-in styles, custom styles, and named presets that store all caption, canvas, transcription, and export settings.
+- Supports multiple audio tracks, volume, fade in/out, normalization, and mixed audio during rendering.
+- Preserves source resolution, frame rate, and extension when requested, with configurable codec, quality, audio, aspect ratio, and output formats.
+- Produces burned-in video, transparent MOV, green screen, mask pairs, SRT, TXT, ASS, and editable `.captionstudio` projects.
+- Supports batch media import, sequential transcription, and sequential export.
 
-## Tamamen Yerel Model
+## Fully Offline Model
 
-Portable klasorun `resources/models` bolumunde Turbo model agirliklari bulunur. Uygulama uzak model erisimini kapatir; model indirmez ve transkripsiyon icin internet kullanmaz.
+The portable build ships Turbo model files in `resources/models`. Remote model access is disabled, so the application does not download model files or use the internet for transcription.
 
-- WebGPU uyumlu cihazlarda editor GPU kullanir.
-- GPU yoksa veya GPU modeli baslatamazsa q4 WASM/CPU yoluna otomatik duser.
-- Portable klasoru tasirken `resources/models` klasorunu silme veya ayirma.
+- The editor uses WebGPU when it is available.
+- It automatically falls back to the q4 WASM/CPU path when a GPU is unavailable or cannot initialize the model.
+- Do not remove or separate the `resources/models` directory when moving the portable build.
 
-## Calistirma
-
-Gelistirme icin:
+## Development
 
 ```powershell
 npm install
 npm run desktop:dev
 ```
 
-Kontrol ve derleme icin:
+Validation and build:
 
 ```powershell
 npm run check
@@ -40,41 +38,41 @@ npm run test:desktop
 npm run desktop:build
 ```
 
-## Portable Kullanim
+## Portable Use
 
-Tamamen tasinabilir ve internetsiz kullanim icin `release/win-unpacked` klasorunun tamamini tasiyin. Giris dosyasi:
+For fully portable offline use, move the complete `release/win-unpacked` directory. The entry point is:
 
 ```text
 release/win-unpacked/Caption Studio.exe
 ```
 
-`resources/models` model dosyalarini, `resources/app.asar.unpacked` ise native FFmpeg ve ONNX bagimliliklarini icerir. Bu klasorler olmadan model veya render motoru calismaz.
+`resources/models` contains the local model weights and `resources/app.asar.unpacked` contains native FFmpeg and ONNX dependencies. Both are required for transcription and rendering.
 
-## Terminal Otomasyonu
+## Terminal Automation
 
-Arayuzu acmadan video islemek icin:
+Process a video without opening the editor:
 
 ```powershell
-& ".\Caption Studio.exe" --caption-cli "--caption-input=C:\Videolar\kaynak.mp4" "--caption-preset-name=soru cevap"
+& ".\Caption Studio.exe" --caption-cli "--caption-input=C:\Videos\source.mp4" "--caption-preset-name=question answer"
 ```
 
-Komut, kaynak videonun yaninda `kaynak-caption-studio` adinda bir klasor olusturur. Orijinal videoyu kopyalamaz; altyazili video, SRT, TXT, ASS ve `.captionstudio` proje dosyasini bu klasore yazar.
+The command creates a `source-caption-studio` output directory next to the source media. It does not copy the original video. The directory contains the captioned video, SRT, TXT, ASS, and editable `.captionstudio` project file.
 
-Tum terminal secenekleri ve ornekler icin [TERMINAL-KULLANIM.md](TERMINAL-KULLANIM.md) dosyasina bak.
+See [TERMINAL-KULLANIM.md](TERMINAL-KULLANIM.md) for the complete terminal reference and Turkish examples.
 
-## Kalici Ayarlar
+## Persistent Presets
 
-Kaydedilen tum ayar presetleri Windows kullanici verisinde tutulur:
+Saved presets are stored in the Windows user profile:
 
 ```text
 %APPDATA%\Caption Studio\settings-presets.json
 ```
 
-Bu dosya terminalin `--caption-preset-name` secenegi tarafindan da okunur.
+The terminal `--caption-preset-name` option reads this file as well.
 
-## Teknik Yapi
+## Technology
 
-- Electron + React + TypeScript
-- Transformers.js / ONNX Runtime ile yerel Whisper
-- FFmpeg / FFprobe ile medya analizi ve native render
-- Playwright ve Vitest ile birim, UI, Electron ve portable testleri
+- Electron, React, and TypeScript
+- Transformers.js and ONNX Runtime for local Whisper inference
+- FFmpeg and FFprobe for media inspection and native rendering
+- Vitest and Playwright for unit, UI, Electron, and portable tests
