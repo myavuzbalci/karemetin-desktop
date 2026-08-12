@@ -27,8 +27,8 @@ Windows may show a SmartScreen warning because the binaries are not code signed.
 
 The portable build ships Turbo model files in `resources/models`. Remote model access is disabled, so the application does not download model files or use the internet for transcription.
 
-- The editor uses WebGPU when it is available.
-- It automatically falls back to the q4 WASM/CPU path when a GPU is unavailable or cannot initialize the model.
+- The editor uses the bundled q4 Turbo model on WebGPU when it is available.
+- It automatically falls back to the same q4 model through WASM/CPU when a GPU is unavailable or cannot initialize the model.
 - Do not remove or separate the `resources/models` directory when moving the portable build.
 
 ## Development

@@ -22,7 +22,7 @@ export const MODEL_CONFIGS: Record<
     label: 'Large v3 Turbo',
     modelId: 'onnx-community/whisper-large-v3-turbo_timestamped',
     description: 'En iyi kalite. GPU ile onerilir.',
-    sizeMb: 1738,
+    sizeMb: 724,
   },
   base: {
     key: 'base',

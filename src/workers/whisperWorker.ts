@@ -92,9 +92,11 @@ async function getPreferredDevice(): Promise<'webgpu' | 'wasm'> {
 }
 
 function getDtype(modelKey: ModelKey, device: 'webgpu' | 'wasm') {
-  if (device === 'wasm') return 'q4'
-  if (modelKey === 'large') return { encoder_model: 'fp16' as const, decoder_model_merged: 'q4' as const }
-  return { encoder_model: 'fp32' as const, decoder_model_merged: 'q4' as const }
+  // q4 is supported by both WebGPU and WASM. Shipping one local model variant
+  // keeps the offline portable build compact while retaining GPU acceleration.
+  void modelKey
+  void device
+  return 'q4'
 }
 
 function post(message: TranscriptionWorkerResponse) {
