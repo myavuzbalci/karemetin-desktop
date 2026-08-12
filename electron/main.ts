@@ -1,7 +1,7 @@
 import { app, BrowserWindow, dialog, ipcMain, Menu, net, protocol, session, shell } from 'electron'
 import type { ChildProcessWithoutNullStreams } from 'node:child_process'
 import { createReadStream } from 'node:fs'
-import { mkdir, readFile, readdir, rm, stat, writeFile } from 'node:fs/promises'
+import { access, copyFile, cp, mkdir, readFile, readdir, rm, stat, writeFile } from 'node:fs/promises'
 import { createServer, type Server } from 'node:http'
 import type { AddressInfo } from 'node:net'
 import path from 'node:path'
@@ -26,13 +26,14 @@ protocol.registerSchemesAsPrivileged([
   },
 ])
 
-app.setName('Caption Studio')
+app.setName('KareMetin')
 if (process.env.CAPTION_STUDIO_TEST_USER_DATA) {
   app.setPath('userData', process.env.CAPTION_STUDIO_TEST_USER_DATA)
 }
 
 void app.whenReady().then(async () => {
   Menu.setApplicationMenu(null)
+  await migrateLegacyUserData()
   if (cliOptions) {
     try {
       const outputs = await runCli(cliOptions, getModelDirectory(), settingsPresetsPath())
@@ -92,7 +93,7 @@ async function createWindow() {
     thickFrame: true,
     hasShadow: true,
     backgroundColor: '#0b0c11',
-    title: 'Caption Studio',
+    title: 'KareMetin',
     webPreferences: {
       preload: path.join(currentDirectory, 'preload.cjs'),
       contextIsolation: true,
@@ -300,9 +301,9 @@ function registerIpc() {
   })
   ipcMain.handle('files:open-project', async () => {
     const result = await dialog.showOpenDialog(mainWindow as BrowserWindow, {
-      title: 'Caption Studio proje dosyasini ac',
+      title: 'KareMetin proje dosyasini ac',
       properties: ['openFile'],
-      filters: [{ name: 'Caption Studio projesi', extensions: ['captionstudio', 'json'] }],
+      filters: [{ name: 'KareMetin projesi', extensions: ['captionstudio', 'json'] }],
     })
     if (result.canceled || !result.filePaths[0]) return undefined
     return { path: result.filePaths[0], contents: await readFile(result.filePaths[0], 'utf8') }
@@ -378,6 +379,47 @@ async function projectsDirectory() {
 
 function settingsPresetsPath() {
   return path.join(app.getPath('userData'), 'settings-presets.json')
+}
+
+async function migrateLegacyUserData() {
+  if (process.env.CAPTION_STUDIO_TEST_USER_DATA) return
+
+  const current = app.getPath('userData')
+  const legacy = path.join(app.getPath('appData'), 'Caption Studio')
+  if (path.resolve(current) === path.resolve(legacy)) return
+
+  try {
+    await access(legacy)
+  } catch {
+    return
+  }
+
+  await mkdir(current, { recursive: true })
+  for (const filename of ['settings-presets.json']) {
+    const source = path.join(legacy, filename)
+    const target = path.join(current, filename)
+    try {
+      await access(target)
+    } catch {
+      try {
+        await copyFile(source, target)
+      } catch {
+        // The old installation may not contain every optional data file.
+      }
+    }
+  }
+
+  const sourceProjects = path.join(legacy, 'projects')
+  const targetProjects = path.join(current, 'projects')
+  try {
+    await access(targetProjects)
+  } catch {
+    try {
+      await cp(sourceProjects, targetProjects, { recursive: true })
+    } catch {
+      // Projects are optional and migration must not prevent startup.
+    }
+  }
 }
 
 function projectPath(directory: string, id: string) {

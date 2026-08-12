@@ -1,9 +1,9 @@
 {
-  "name": "caption-studio",
+  "name": "karemetin-desktop",
   "private": true,
   "version": "1.0.0",
   "description": "Offline AI subtitle editor and native video renderer",
-  "author": "Caption Studio",
+  "author": "KareMetin",
   "main": "dist-electron/main.js",
   "type": "module",
   "scripts": {
@@ -47,8 +47,8 @@
     "vitest": "^4.1.10"
   },
   "build": {
-    "appId": "com.captionstudio.desktop",
-    "productName": "Caption Studio",
+    "appId": "com.karemetin.desktop",
+    "productName": "KareMetin",
     "electronDist": "node_modules/electron/dist",
     "asar": true,
     "directories": {
@@ -102,14 +102,14 @@
       ]
     },
     "nsis": {
-      "artifactName": "Caption-Studio-Setup-${version}-${arch}.${ext}",
+      "artifactName": "KareMetin-Setup-${version}-${arch}.${ext}",
       "oneClick": false,
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true
     },
     "portable": {
-      "artifactName": "Caption-Studio-Portable-${version}-${arch}.${ext}"
+      "artifactName": "KareMetin-Portable-${version}-${arch}.${ext}"
     }
   }
 }

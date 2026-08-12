@@ -1,5 +1,6 @@
 import { BookmarkPlus, Download, Minus, Save, Square, X } from 'lucide-react'
 import { useEffect, useState } from 'react'
+import { useLanguage } from '../lib/i18n'
 
 type TitleBarProps = {
   projectTitle?: string
@@ -14,6 +15,7 @@ type TitleBarProps = {
 export function TitleBar({ projectTitle, busy, saved, onTitleChange, onSave, onSavePreset, onExport }: TitleBarProps) {
   const [maximized, setMaximized] = useState(false)
   const desktop = window.captionStudio
+  const { language, setLanguage } = useLanguage()
 
   useEffect(() => {
     if (!desktop) return
@@ -30,8 +32,8 @@ export function TitleBar({ projectTitle, busy, saved, onTitleChange, onSave, onS
       }}
     >
       <div className="titlebar-brand">
-        <span className="brand-mark">CS</span>
-        <span>Caption Studio</span>
+        <span className="brand-mark">KM</span>
+        <span>KareMetin</span>
         {desktop ? <small>DESKTOP</small> : <small>WEB PREVIEW</small>}
       </div>
       <div className="titlebar-project">
@@ -47,6 +49,16 @@ export function TitleBar({ projectTitle, busy, saved, onTitleChange, onSave, onS
         {projectTitle ? <i className={saved ? 'save-dot saved' : 'save-dot'} /> : null}
       </div>
       <div className="titlebar-actions no-drag">
+        <select
+          className="language-select"
+          value={language}
+          onChange={(event) => setLanguage(event.target.value as 'en' | 'tr')}
+          aria-label={language === 'en' ? 'Interface language' : 'Arayuz dili'}
+          title={language === 'en' ? 'Interface language' : 'Arayuz dili'}
+        >
+          <option value="en">EN</option>
+          <option value="tr">TR</option>
+        </select>
         <button type="button" className="icon-command" onClick={onSave} disabled={!projectTitle || busy} title="Projeyi kaydet">
           <Save size={16} />
         </button>

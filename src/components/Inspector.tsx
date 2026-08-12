@@ -800,8 +800,8 @@ function VariantBar({ variants, selectedVariantId, onSelect, onAdd, onDelete, on
 function EmptyInspector({ onOpenMedia }: { onOpenMedia: () => void }) {
   return (
     <div className="empty-inspector">
-      <span className="brand-mark large">CS</span>
-      <h2>Caption Studio</h2>
+      <span className="brand-mark large">KM</span>
+      <h2>KareMetin</h2>
       <p>Video veya ses dosyasi secerek basla.</p>
       <button type="button" className="primary-wide" onClick={onOpenMedia}><Upload size={16} /> Dosya sec</button>
     </div>

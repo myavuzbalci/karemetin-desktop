@@ -288,7 +288,7 @@ function App() {
     if (!file) return
     try {
       const parsed = JSON.parse(file.contents) as Partial<CaptionProject>
-      if (!parsed.id || !parsed.title || !parsed.mediaName) throw new Error('Gecerli bir Caption Studio proje dosyasi degil.')
+      if (!parsed.id || !parsed.title || !parsed.mediaName) throw new Error('Gecerli bir KareMetin proje dosyasi degil.')
       const imported = normalizeProject(parsed as CaptionProject)
       await saveProject(imported)
       activateProject(imported)

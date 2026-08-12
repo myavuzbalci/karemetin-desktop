@@ -1,4 +1,4 @@
-# Caption Studio
+# KareMetin
 
 An offline AI subtitle editor and native video renderer for Windows. Transcription, media inspection, and FFmpeg exports run locally without an internet connection.
 
@@ -43,7 +43,7 @@ npm run desktop:build
 For fully portable offline use, move the complete `release/win-unpacked` directory. The entry point is:
 
 ```text
-release/win-unpacked/Caption Studio.exe
+release/win-unpacked/KareMetin.exe
 ```
 
 `resources/models` contains the local model weights and `resources/app.asar.unpacked` contains native FFmpeg and ONNX dependencies. Both are required for transcription and rendering.
@@ -53,10 +53,10 @@ release/win-unpacked/Caption Studio.exe
 Process a video without opening the editor:
 
 ```powershell
-& ".\Caption Studio.exe" --caption-cli "--caption-input=C:\Videos\source.mp4" "--caption-preset-name=question answer"
+& ".\KareMetin.exe" --caption-cli "--caption-input=C:\Videos\source.mp4" "--caption-preset-name=question answer"
 ```
 
-The command creates a `source-caption-studio` output directory next to the source media. It does not copy the original video. The directory contains the captioned video, SRT, TXT, ASS, and editable `.captionstudio` project file.
+The command creates a `source-karemetin` output directory next to the source media. It does not copy the original video. The directory contains the captioned video, SRT, TXT, ASS, and editable `.captionstudio` project file.
 
 See [TERMINAL-KULLANIM.md](TERMINAL-KULLANIM.md) for the complete terminal reference and Turkish examples.
 
@@ -65,7 +65,7 @@ See [TERMINAL-KULLANIM.md](TERMINAL-KULLANIM.md) for the complete terminal refer
 Saved presets are stored in the Windows user profile:
 
 ```text
-%APPDATA%\Caption Studio\settings-presets.json
+%APPDATA%\KareMetin\settings-presets.json
 ```
 
 The terminal `--caption-preset-name` option reads this file as well.

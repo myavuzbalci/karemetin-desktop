@@ -1,16 +1,16 @@
-# Caption Studio Terminal Kullanimi
+# KareMetin Terminal Kullanimi
 
-Bu komutlar `release\\win-unpacked` klasorundeki `Caption Studio.exe` ile calisir. Uygulama, paketle gelen yerel Whisper modelini kullanir; transkripsiyon sirasinda internet baglantisi gerekmez.
+Bu komutlar `release\\win-unpacked` klasorundeki `KareMetin.exe` ile calisir. Uygulama, paketle gelen yerel Whisper modelini kullanir; transkripsiyon sirasinda internet baglantisi gerekmez.
 
 ## Temel komut
 
 PowerShell'i `win-unpacked` klasorunde acip asagidaki komutu calistir:
 
 ```powershell
-& ".\Caption Studio.exe" --caption-cli "--caption-input=C:\Videolar\kaynak.mp4"
+& ".\KareMetin.exe" --caption-cli "--caption-input=C:\Videolar\kaynak.mp4"
 ```
 
-Girdi videosunun yaninda otomatik olarak `kaynak-caption-studio` adinda bir cikti klasoru olusturulur. Orijinal video bu klasore kopyalanmaz. Uretilen dosyalar:
+Girdi videosunun yaninda otomatik olarak `kaynak-karemetin` adinda bir cikti klasoru olusturulur. Orijinal video bu klasore kopyalanmaz. Uretilen dosyalar:
 
 - `kaynak-captioned.mp4`: altyazisi videoya islenmis cikti
 - `kaynak.srt`: zaman kodlu altyazi
@@ -27,13 +27,13 @@ Girdi videosunun yaninda otomatik olarak `kaynak-caption-studio` adinda bir cikt
 Uygulama icinde kaydettigin `soru cevap` gibi tum ayar presetleri terminalden isimle okunabilir:
 
 ```powershell
-& ".\Caption Studio.exe" --caption-cli "--caption-input=C:\Videolar\kaynak.mp4" "--caption-preset-name=soru cevap"
+& ".\KareMetin.exe" --caption-cli "--caption-input=C:\Videolar\kaynak.mp4" "--caption-preset-name=soru cevap"
 ```
 
 ## Cikti klasoru belirleme
 
 ```powershell
-& ".\Caption Studio.exe" --caption-cli "--caption-input=C:\Videolar\kaynak.mp4" "--caption-output-dir=D:\Ciktilar"
+& ".\KareMetin.exe" --caption-cli "--caption-input=C:\Videolar\kaynak.mp4" "--caption-output-dir=D:\Ciktilar"
 ```
 
 ## Kaydedilmis bir ayari kullanma
@@ -41,7 +41,7 @@ Uygulama icinde kaydettigin `soru cevap` gibi tum ayar presetleri terminalden is
 Editor icinden daha once kaydettigin bir proje dosyasini (`.captionstudio`) preset olarak verebilirsin. Bu dosyanin altyazi stili, kanvas, transkripsiyon ve export ayarlari yeni videoya uygulanir.
 
 ```powershell
-& ".\Caption Studio.exe" --caption-cli "--caption-input=C:\Videolar\kaynak.mp4" "--caption-preset=C:\Projeler\soru-cevap.captionstudio"
+& ".\KareMetin.exe" --caption-cli "--caption-input=C:\Videolar\kaynak.mp4" "--caption-preset=C:\Projeler\soru-cevap.captionstudio"
 ```
 
 ## Sadece altyazi ve proje dosyalari
@@ -49,7 +49,7 @@ Editor icinden daha once kaydettigin bir proje dosyasini (`.captionstudio`) pres
 Video render etmeden SRT, TXT, ASS ve proje dosyasi almak icin:
 
 ```powershell
-& ".\Caption Studio.exe" --caption-cli "--caption-input=C:\Videolar\kaynak.mp4" --caption-no-video
+& ".\KareMetin.exe" --caption-cli "--caption-input=C:\Videolar\kaynak.mp4" --caption-no-video
 ```
 
 ## Onemli notlar

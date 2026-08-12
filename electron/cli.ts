@@ -26,11 +26,11 @@ type CliOptions = {
 export function parseCliOptions(args: string[]): CliOptions | undefined {
   if (!args.includes('--caption-cli')) return undefined
   const inputPath = optionValue(args, '--caption-input')
-  if (!inputPath) throw new Error('Kullanim: Caption Studio.exe --caption-cli --caption-input="video.mp4" [--caption-preset="ayar.json" | --caption-preset-name="soru cevap"] [--caption-output-dir="klasor"] [--caption-no-video]')
+  if (!inputPath) throw new Error('Kullanim: KareMetin.exe --caption-cli --caption-input="video.mp4" [--caption-preset="ayar.json" | --caption-preset-name="soru cevap"] [--caption-output-dir="klasor"] [--caption-no-video]')
   const outputDirectory = optionValue(args, '--caption-output-dir')
   return {
     inputPath: path.resolve(inputPath),
-    outputDirectory: path.resolve(outputDirectory ?? path.join(path.dirname(inputPath), `${path.basename(inputPath, path.extname(inputPath))}-caption-studio`)),
+    outputDirectory: path.resolve(outputDirectory ?? path.join(path.dirname(inputPath), `${path.basename(inputPath, path.extname(inputPath))}-karemetin`)),
     presetPath: optionValue(args, '--caption-preset'),
     presetName: optionValue(args, '--caption-preset-name'),
     renderVideo: !args.includes('--caption-no-video'),

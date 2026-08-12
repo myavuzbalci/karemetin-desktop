@@ -183,6 +183,17 @@ progress {
   background: var(--surface-2);
 }
 
+.language-select {
+  width: 48px;
+  min-height: 30px !important;
+  padding: 0 6px !important;
+  border-radius: 4px;
+  color: var(--text-2);
+  font-size: 10px;
+  font-weight: 800;
+  -webkit-app-region: no-drag;
+}
+
 .icon-command {
   width: 32px;
 }

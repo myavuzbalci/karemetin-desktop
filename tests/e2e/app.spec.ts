@@ -7,13 +7,26 @@ const portraitVideoFixture = path.resolve('tests/fixtures/sample-portrait.webm')
 const subtitleFixture = path.resolve('tests/fixtures/sample.srt')
 
 test.beforeEach(async ({ page }) => {
-  await page.addInitScript(() => localStorage.setItem('caption-studio-auto-transcribe', 'false'))
+  await page.addInitScript(() => {
+    localStorage.setItem('caption-studio-auto-transcribe', 'false')
+    localStorage.setItem('caption-studio-interface-language', 'tr')
+  })
+})
+
+test('defaults to English and can switch the interface back to Turkish', async ({ page }) => {
+  await page.addInitScript(() => localStorage.setItem('caption-studio-interface-language', 'en'))
+  await page.goto('/')
+
+  await expect(page.locator('.language-select')).toHaveValue('en')
+  await expect(page.getByRole('button', { name: 'Open video or audio file' })).toBeVisible()
+  await page.locator('.language-select').selectOption('tr')
+  await expect(page.getByRole('button', { name: 'Video veya ses dosyasi ac' })).toBeVisible()
 })
 
 test('loads the desktop-style editor shell', async ({ page }) => {
   await page.goto('/')
 
-  await expect(page.locator('.titlebar-brand')).toContainText('Caption Studio')
+  await expect(page.locator('.titlebar-brand')).toContainText('KareMetin')
   await expect(page.getByRole('button', { name: /Video veya ses dosyasi ac/ })).toBeVisible()
   await expect(page.getByRole('button', { name: 'Projeler ve toplu islemler' })).toBeVisible()
   await expect(page.locator('.tool-rail')).toBeVisible()

@@ -58,13 +58,13 @@ function safeName(value: string) {
 
 function readme(request: NativeProjectPackageRequest) {
   return [
-    'Caption Studio proje paketi',
+    'KareMetin proje paketi',
     '',
     'original/: kaynak medya',
     'rendered/: son video ciktilari',
     'subtitles/: SRT, TXT ve ASS altyazilari',
     'audio-tracks/: eklenen ses dosyalari',
-    'project.captionstudio: Caption Studio icinde tekrar acilabilen proje dosyasi',
+    'project.captionstudio: KareMetin icinde tekrar acilabilen proje dosyasi',
     'project.json: insan tarafindan incelenebilen ayni proje verisi',
     '',
     `Proje: ${request.title}`,

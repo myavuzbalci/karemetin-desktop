@@ -33,6 +33,7 @@ test('desktop app opens local media and exports a real captioned video', async (
     const window = await electronApp.firstWindow()
     await window.waitForLoadState('domcontentloaded')
     await window.evaluate(() => localStorage.setItem('caption-studio-auto-transcribe', 'false'))
+    await window.locator('.language-select').selectOption('tr')
     await expect(window.locator('.titlebar-brand')).toContainText('DESKTOP')
     expect(await window.evaluate(() => window.captionStudio?.isDesktop)).toBe(true)
     await expect.poll(async () => window.evaluate(async () => {
@@ -100,6 +101,7 @@ test('desktop app uses portrait source dimensions for the preview canvas', async
     const window = await electronApp.firstWindow()
     await window.waitForLoadState('domcontentloaded')
     await window.evaluate(() => localStorage.setItem('caption-studio-auto-transcribe', 'false'))
+    await window.locator('.language-select').selectOption('tr')
     await window.getByRole('button', { name: /Video veya ses dosyasi ac/ }).click()
     await expect(window.locator('.media-facts')).toContainText('180 x 320')
 
@@ -147,6 +149,7 @@ test('desktop app automatically starts Turbo transcription for new media', async
 
     const window = await electronApp.firstWindow()
     await window.waitForLoadState('domcontentloaded')
+    await window.locator('.language-select').selectOption('tr')
     await window.evaluate(() => {
       const testWindow = window as Window & {
         __transcriptionModel?: string
