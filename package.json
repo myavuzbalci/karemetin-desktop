@@ -1,7 +1,7 @@
 {
   "name": "karemetin-desktop",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Offline AI subtitle editor and native video renderer",
   "author": "KareMetin",
   "license": "GPL-3.0-or-later",
@@ -79,8 +79,8 @@
     ],
     "extraFiles": [
       {
-        "from": "TERMINAL-KULLANIM.md",
-        "to": "TERMINAL-KULLANIM.md"
+        "from": "TERMINAL-USAGE.md",
+        "to": "TERMINAL-USAGE.md"
       },
       {
         "from": "LICENSE",

@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.1 - 2026-08-12
+
+- English terminal usage guide and CLI progress/error messages.
+
 ## 1.0.0 - 2026-08-12
 
 - First public Windows release of KareMetin.

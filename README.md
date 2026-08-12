@@ -6,8 +6,8 @@ An AI subtitle editor and native video renderer for Windows. On first launch, Ka
 
 Download the Windows installer or portable build from the [latest release](https://github.com/myavuzbalci/karemetin-desktop/releases/latest).
 
-- `KareMetin-Setup-1.0.0-x64.exe`: installer with Start Menu and desktop shortcuts.
-- `KareMetin-Portable-1.0.0-x64.exe`: portable application build. Keep it in a writable folder; it extracts its runtime beside the executable on first launch.
+- `KareMetin-Setup-<version>-x64.exe`: installer with Start Menu and desktop shortcuts.
+- `KareMetin-Portable-<version>-x64.exe`: portable application build. Keep it in a writable folder; it extracts its runtime beside the executable on first launch.
 
 Windows may show a SmartScreen warning because the binaries are not code signed. Verify the SHA-256 checksums published with the release before running a downloaded file. The first application launch requires an internet connection to download the local AI model; video and audio are never uploaded.
 
@@ -72,7 +72,7 @@ Process a video without opening the editor:
 
 The command creates a `source-karemetin` output directory next to the source media. It does not copy the original video. The directory contains the captioned video, SRT, TXT, ASS, and editable `.karemetin` project file.
 
-See [TERMINAL-KULLANIM.md](TERMINAL-KULLANIM.md) for the complete terminal reference and Turkish examples.
+See [TERMINAL-USAGE.md](TERMINAL-USAGE.md) for the complete terminal reference and examples.
 
 ## Persistent Presets
 

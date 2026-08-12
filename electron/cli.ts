@@ -26,7 +26,7 @@ type CliOptions = {
 export function parseCliOptions(args: string[]): CliOptions | undefined {
   if (!args.includes('--caption-cli')) return undefined
   const inputPath = optionValue(args, '--caption-input')
-  if (!inputPath) throw new Error('Kullanim: KareMetin.exe --caption-cli --caption-input="video.mp4" [--caption-preset="ayar.json" | --caption-preset-name="soru cevap"] [--caption-output-dir="klasor"] [--caption-no-video]')
+  if (!inputPath) throw new Error('Usage: KareMetin.exe --caption-cli --caption-input="video.mp4" [--caption-preset="settings.json" | --caption-preset-name="question answer"] [--caption-output-dir="output-folder"] [--caption-no-video]')
   const outputDirectory = optionValue(args, '--caption-output-dir')
   return {
     inputPath: path.resolve(inputPath),
@@ -39,8 +39,8 @@ export function parseCliOptions(args: string[]): CliOptions | undefined {
 
 export async function runCli(options: CliOptions, modelDirectory: string, settingsPresetFile: string) {
   const media = await inspectMedia(options.inputPath)
-  if (!media.metadata.hasAudio) throw new Error('Girdi dosyasinda transkripsiyon icin ses bulunamadi.')
-  if (options.presetPath && options.presetName) throw new Error('Tek seferde sadece bir preset secilebilir.')
+  if (!media.metadata.hasAudio) throw new Error('The input file has no audio available for transcription.')
+  if (options.presetPath && options.presetName) throw new Error('Choose either a preset file or a saved preset name, not both.')
   const preset = options.presetPath
     ? await loadPreset(path.resolve(options.presetPath))
     : options.presetName
@@ -55,13 +55,13 @@ export async function runCli(options: CliOptions, modelDirectory: string, settin
   env.allowRemoteModels = false
   env.localModelPath = modelDirectory
   env.useFS = true
-  console.log('Yerel Turbo model yukleniyor (internet kullanilmaz)...')
+  console.log('Loading the local Turbo model...')
   const transcriber = await pipeline('automatic-speech-recognition', 'onnx-community/whisper-large-v3-turbo_timestamped', {
     device: 'cpu',
     dtype: 'q4',
     local_files_only: true,
   })
-  console.log('Transkripsiyon basladi...')
+  console.log('Transcription started...')
   const result = await transcriber(audio, {
     return_timestamps: 'word',
     chunk_length_s: project.settings.chunkLengthSeconds,
@@ -102,7 +102,7 @@ export async function runCli(options: CliOptions, modelDirectory: string, settin
   const outputs = [srtPath, textPath, assPath, projectPath]
   if (options.renderVideo) {
     const videoPath = path.join(options.outputDirectory, `${stem}-captioned${path.extname(options.inputPath) || '.mp4'}`)
-    console.log('Altyazili video disa aktariliyor...')
+    console.log('Exporting captioned video...')
     const rendered = await exportNativeVideo({
       jobId: cryptoId('cli-export'),
       inputPath: options.inputPath,

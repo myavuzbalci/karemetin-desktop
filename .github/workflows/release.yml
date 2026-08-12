@@ -6,7 +6,7 @@ on:
       tag:
         description: Release tag
         required: true
-        default: v1.0.0
+        default: v1.0.1
 
 permissions:
   contents: write
@@ -37,19 +37,21 @@ jobs:
       - name: Create checksums
         shell: pwsh
         run: |
-          $assets = Get-ChildItem release -File -Filter 'KareMetin-*.exe' | Sort-Object Name
+          $version = '${{ inputs.tag }}'.TrimStart('v')
+          $assets = Get-ChildItem release -File -Filter "KareMetin-*-$version-x64.exe" | Sort-Object Name
           $lines = foreach ($asset in $assets) {
             "{0}  {1}" -f (Get-FileHash -Algorithm SHA256 -LiteralPath $asset.FullName).Hash.ToLowerInvariant(), $asset.Name
           }
-          Set-Content -LiteralPath release/KareMetin-1.0.0-SHA256SUMS.txt -Value $lines -Encoding ascii
+          Set-Content -LiteralPath "release/KareMetin-$version-SHA256SUMS.txt" -Value $lines -Encoding ascii
 
       - name: Publish release
         env:
           GH_TOKEN: ${{ github.token }}
         shell: pwsh
         run: |
+          $version = '${{ inputs.tag }}'.TrimStart('v')
           $notes = @"
-          First public Windows release of KareMetin.
+          KareMetin $version Windows release.
 
           - Whisper Large v3 Turbo transcription with a one-time first-run model download, then local WebGPU/CPU operation.
           - Native FFmpeg exports, editable .karemetin projects, ZIP packages, and CLI automation.
@@ -57,4 +59,4 @@ jobs:
 
           Choose Setup for a normal Windows installation or Portable to run without installing. On first launch, an internet connection downloads the local AI model once; media is never uploaded. Verify the SHA-256 checksums before running a download. Windows may show a SmartScreen warning because this release is not code signed.
           "@
-          gh release create "${{ inputs.tag }}" release/KareMetin-Setup-1.0.0-x64.exe release/KareMetin-Portable-1.0.0-x64.exe release/KareMetin-1.0.0-SHA256SUMS.txt --target "${{ github.sha }}" --title "KareMetin 1.0.0" --notes $notes --latest
+          gh release create "${{ inputs.tag }}" "release/KareMetin-Setup-$version-x64.exe" "release/KareMetin-Portable-$version-x64.exe" "release/KareMetin-$version-SHA256SUMS.txt" --target "${{ github.sha }}" --title "KareMetin $version" --notes $notes --latest
