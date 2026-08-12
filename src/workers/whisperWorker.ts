@@ -96,7 +96,7 @@ function getDtype(modelKey: ModelKey, device: 'webgpu' | 'wasm') {
   // keeps the offline portable build compact while retaining GPU acceleration.
   void modelKey
   void device
-  return 'q4'
+  return 'q4' as const
 }
 
 function post(message: TranscriptionWorkerResponse) {
