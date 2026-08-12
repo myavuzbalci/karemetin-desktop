@@ -92,8 +92,8 @@ async function getPreferredDevice(): Promise<'webgpu' | 'wasm'> {
 }
 
 function getDtype(modelKey: ModelKey, device: 'webgpu' | 'wasm') {
-  // q4 is supported by both WebGPU and WASM. Shipping one local model variant
-  // keeps the offline portable build compact while retaining GPU acceleration.
+  // q4 is supported by both WebGPU and WASM. One downloaded local variant
+  // keeps disk use lower while retaining GPU acceleration.
   void modelKey
   void device
   return 'q4' as const

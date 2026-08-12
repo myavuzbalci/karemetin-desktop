@@ -13,6 +13,13 @@ import type {
 contextBridge.exposeInMainWorld('captionStudio', {
   isDesktop: true,
   bundledModelBaseUrl: ipcRenderer.sendSync('models:base-url') as string,
+  modelStatus: () => ipcRenderer.invoke('models:status') as Promise<{ ready: boolean; downloading: boolean }>,
+  ensureLocalModel: () => ipcRenderer.invoke('models:ensure') as Promise<void>,
+  onModelDownloadProgress: (callback: (progress: { file: string; completedFiles: number; totalFiles: number; loadedBytes: number; totalBytes?: number }) => void) => {
+    const listener = (_event: Electron.IpcRendererEvent, progress: { file: string; completedFiles: number; totalFiles: number; loadedBytes: number; totalBytes?: number }) => callback(progress)
+    ipcRenderer.on('models:download-progress', listener)
+    return () => ipcRenderer.removeListener('models:download-progress', listener)
+  },
   minimize: () => ipcRenderer.invoke('window:minimize'),
   toggleMaximize: () => ipcRenderer.invoke('window:toggle-maximize') as Promise<boolean>,
   close: () => ipcRenderer.invoke('window:close'),

@@ -24,18 +24,9 @@ jobs:
           node-version: 22
           cache: npm
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-
       - name: Install dependencies
         run: |
-          npm install
-          python -m pip install --upgrade pip huggingface_hub
-
-      - name: Download the bundled q4 Turbo model
-        run: python scripts/download_bundled_model.py
+          npm ci --include=dev
 
       - name: Validate and package
         run: |
@@ -59,10 +50,10 @@ jobs:
           $notes = @"
           First public Windows release of KareMetin.
 
-          - Fully offline q4 Whisper Large v3 Turbo transcription with WebGPU and CPU fallback.
+          - Whisper Large v3 Turbo transcription with a one-time first-run model download, then local WebGPU/CPU operation.
           - Native FFmpeg exports, editable .karemetin projects, ZIP packages, and CLI automation.
           - English interface by default with an English/Turkish selector.
 
-          Choose Setup for a normal Windows installation or Portable to run without installing. Verify the SHA-256 checksums before running a download. Windows may show a SmartScreen warning because this release is not code signed.
+          Choose Setup for a normal Windows installation or Portable to run without installing. On first launch, an internet connection downloads the local AI model once; media is never uploaded. Verify the SHA-256 checksums before running a download. Windows may show a SmartScreen warning because this release is not code signed.
           "@
           gh release create "${{ inputs.tag }}" release/KareMetin-Setup-1.0.0-x64.exe release/KareMetin-Portable-1.0.0-x64.exe release/KareMetin-1.0.0-SHA256SUMS.txt --target "${{ github.sha }}" --title "KareMetin 1.0.0" --notes $notes --latest

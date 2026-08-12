@@ -16,9 +16,20 @@ type LocalFontData = {
   style: string
 }
 
+export type LocalModelDownloadProgress = {
+  file: string
+  completedFiles: number
+  totalFiles: number
+  loadedBytes: number
+  totalBytes?: number
+}
+
 export type CaptionStudioDesktopApi = {
   isDesktop: true
   bundledModelBaseUrl: string
+  modelStatus: () => Promise<{ ready: boolean; downloading: boolean }>
+  ensureLocalModel: () => Promise<void>
+  onModelDownloadProgress: (callback: (progress: LocalModelDownloadProgress) => void) => () => void
   minimize: () => Promise<void>
   toggleMaximize: () => Promise<boolean>
   close: () => Promise<void>

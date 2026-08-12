@@ -11,12 +11,14 @@ import { parseCliOptions, runCli } from './cli'
 import { exportProjectPackage } from './services/exportPackage'
 import { exportNativeVideo } from './services/exportVideo'
 import { extractMonoAudio, extractWaveform, getFfmpegVersion, inspectMedia } from './services/media'
+import { downloadModel, isModelReady, MODEL_REPOSITORY, type ModelDownloadProgress } from './services/modelDownload'
 
 const currentDirectory = path.dirname(fileURLToPath(import.meta.url))
 const activeExports = new Map<string, ChildProcessWithoutNullStreams>()
 let mainWindow: BrowserWindow | null = null
 let modelServer: Server | null = null
 let modelServerBaseUrl = ''
+let modelDownloadPromise: Promise<void> | null = null
 const cliOptions = parseCliOptions(cliArguments())
 
 protocol.registerSchemesAsPrivileged([
@@ -36,6 +38,7 @@ void app.whenReady().then(async () => {
   await migrateLegacyUserData()
   if (cliOptions) {
     try {
+      await ensureLocalModel()
       const outputs = await runCli(cliOptions, getModelDirectory(), settingsPresetsPath())
       outputs.forEach((output) => console.log(output))
     } catch (error) {
@@ -132,7 +135,32 @@ function registerMediaProtocol() {
 }
 
 function getModelDirectory() {
-  return app.isPackaged ? path.join(process.resourcesPath, 'models') : path.join(process.cwd(), 'models')
+  if (process.env.CAPTION_STUDIO_TEST_USER_DATA) return path.join(process.cwd(), 'models')
+  return path.join(app.getPath('userData'), 'models')
+}
+
+function getModelArtifactDirectory() {
+  return path.join(getModelDirectory(), MODEL_REPOSITORY)
+}
+
+async function ensureLocalModel() {
+  if (await isModelReady(getModelArtifactDirectory())) return
+  if (!modelDownloadPromise) {
+    modelDownloadPromise = downloadModel(getModelArtifactDirectory(), sendModelProgress)
+      .then(() => sendModelProgress({
+        file: 'complete',
+        completedFiles: 1,
+        totalFiles: 1,
+        loadedBytes: 1,
+        totalBytes: 1,
+      }))
+      .finally(() => { modelDownloadPromise = null })
+  }
+  return modelDownloadPromise
+}
+
+function sendModelProgress(progress: ModelDownloadProgress) {
+  mainWindow?.webContents.send('models:download-progress', progress)
 }
 
 async function startModelServer() {
@@ -189,6 +217,11 @@ function registerIpc() {
   ipcMain.on('models:base-url', (event) => {
     event.returnValue = modelServerBaseUrl
   })
+  ipcMain.handle('models:status', async () => ({
+    ready: await isModelReady(getModelArtifactDirectory()),
+    downloading: Boolean(modelDownloadPromise),
+  }))
+  ipcMain.handle('models:ensure', () => ensureLocalModel())
   ipcMain.handle('window:minimize', () => mainWindow?.minimize())
   ipcMain.handle('window:toggle-maximize', () => {
     if (mainWindow?.isMaximized()) mainWindow.unmaximize()

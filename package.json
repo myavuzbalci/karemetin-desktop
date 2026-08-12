@@ -76,19 +76,6 @@
       "node_modules/ffmpeg-static/**/*",
       "node_modules/ffprobe-static/bin/win32/x64/**/*"
     ],
-    "extraResources": [
-      {
-        "from": "models",
-        "to": "models",
-        "filter": [
-          "**/*.json",
-          "**/merges.txt",
-          "**/vocab.json",
-          "**/onnx/encoder_model_q4.onnx",
-          "**/onnx/decoder_model_merged_q4.onnx"
-        ]
-      }
-    ],
     "extraFiles": [
       {
         "from": "TERMINAL-KULLANIM.md",

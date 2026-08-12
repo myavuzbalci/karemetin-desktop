@@ -216,6 +216,10 @@ const labels: Record<string, { en: string; tr: string }> = {
   'Segmenti bol': { en: 'Split segment', tr: 'Segmenti bol' },
   'Oncekiyle birlestir': { en: 'Merge with previous', tr: 'Oncekiyle birlestir' },
   'Segmenti sil': { en: 'Delete segment', tr: 'Segmenti sil' },
+  'Preparing offline AI model': { en: 'Preparing offline AI model', tr: 'Yerel AI modeli hazirlaniyor' },
+  'Offline AI model ready': { en: 'Offline AI model ready', tr: 'Yerel AI modeli hazir' },
+  'Offline AI model is ready.': { en: 'Offline AI model is ready.', tr: 'Yerel AI modeli hazir.' },
+  'Model download failed:': { en: 'Model download failed:', tr: 'Model indirme basarisiz:' },
 }
 
 const reverseLabels = new Map(Object.values(labels).map((item) => [item.en, item]))

@@ -1,15 +1,15 @@
 # KareMetin
 
-An offline AI subtitle editor and native video renderer for Windows. Transcription, media inspection, and FFmpeg exports run locally without an internet connection.
+An AI subtitle editor and native video renderer for Windows. On first launch, KareMetin downloads the local Whisper model once. Transcription, media inspection, and FFmpeg exports then run locally.
 
 ## Download
 
 Download the Windows installer or portable build from the [latest release](https://github.com/myavuzbalci/karemetin-desktop/releases/latest).
 
 - `KareMetin-Setup-1.0.0-x64.exe`: installer with Start Menu and desktop shortcuts.
-- `KareMetin-Portable-1.0.0-x64.exe`: self-contained portable build. Keep it in a writable folder; it extracts its runtime beside the executable on first launch.
+- `KareMetin-Portable-1.0.0-x64.exe`: portable application build. Keep it in a writable folder; it extracts its runtime beside the executable on first launch.
 
-Windows may show a SmartScreen warning because the binaries are not code signed. Verify the SHA-256 checksums published with the release before running a downloaded file.
+Windows may show a SmartScreen warning because the binaries are not code signed. Verify the SHA-256 checksums published with the release before running a downloaded file. The first application launch requires an internet connection to download the local AI model; video and audio are never uploaded.
 
 ## Features
 
@@ -23,13 +23,18 @@ Windows may show a SmartScreen warning because the binaries are not code signed.
 - Produces burned-in video, transparent MOV, green screen, mask pairs, SRT, TXT, ASS, and editable `.karemetin` projects.
 - Supports batch media import, sequential transcription, and sequential export.
 
-## Fully Offline Model
+## Local Model Download
 
-The portable build ships Turbo model files in `resources/models`. Remote model access is disabled, so the application does not download model files or use the internet for transcription.
+On first desktop launch, KareMetin downloads the q4 Whisper Large v3 Turbo model from Hugging Face into:
 
-- The editor uses the bundled q4 Turbo model on WebGPU when it is available.
+```text
+%APPDATA%\KareMetin\models
+```
+
+- The editor uses the downloaded q4 Turbo model on WebGPU when it is available.
 - It automatically falls back to the same q4 model through WASM/CPU when a GPU is unavailable or cannot initialize the model.
-- Do not remove or separate the `resources/models` directory when moving the portable build.
+- Once the model is ready, transcription does not require an internet connection.
+- Do not remove the local model directory unless you want it downloaded again.
 
 ## Development
 
@@ -49,13 +54,13 @@ npm run desktop:build
 
 ## Portable Use
 
-For fully portable offline use, move the complete `release/win-unpacked` directory. The entry point is:
+For portable use, move the complete `release/win-unpacked` directory. The entry point is:
 
 ```text
 release/win-unpacked/KareMetin.exe
 ```
 
-`resources/models` contains the local model weights and `resources/app.asar.unpacked` contains native FFmpeg and ONNX dependencies. Both are required for transcription and rendering.
+`resources/app.asar.unpacked` contains native FFmpeg and ONNX dependencies. The local model is stored under `%APPDATA%\KareMetin\models` after the first launch, so it is shared by installed and portable copies on the same Windows account.
 
 ## Terminal Automation
 

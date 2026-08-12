@@ -44,6 +44,7 @@ import type {
   WorkerProgress,
   WorkflowStatus,
 } from './types'
+import type { LocalModelDownloadProgress } from './desktop'
 
 const idleProgress: WorkerProgress = { status: 'idle', progress: 0 }
 const TRANSCRIPTION_CANCELLED = 'TRANSCRIPTION_CANCELLED'
@@ -73,6 +74,8 @@ function App() {
   const [notice, setNotice] = useState('')
   const [ffmpegVersion, setFfmpegVersion] = useState('')
   const [lastExportPaths, setLastExportPaths] = useState<string[]>([])
+  const [modelDownload, setModelDownload] = useState<LocalModelDownloadProgress>()
+  const [modelDownloadError, setModelDownloadError] = useState('')
   const mediaRef = useRef<HTMLVideoElement | HTMLAudioElement | null>(null)
   const mediaInputRef = useRef<HTMLInputElement>(null)
   const subtitleInputRef = useRef<HTMLInputElement>(null)
@@ -105,7 +108,27 @@ function App() {
       const unsubscribe = window.captionStudio.onExportProgress((event) => {
         if (!currentJobIdRef.current || event.jobId === currentJobIdRef.current) setExportProgress(event.progress)
       })
-      return () => unsubscribe()
+      const unsubscribeModel = window.captionStudio.onModelDownloadProgress((event) => {
+        setModelDownload(event)
+        setModelDownloadError('')
+      })
+      void window.captionStudio.modelStatus().then((model) => {
+        if (model.ready) return
+        setModelDownload({ file: 'starting', completedFiles: 0, totalFiles: 13, loadedBytes: 0 })
+        return window.captionStudio?.ensureLocalModel()
+          .then(() => {
+            setModelDownload(undefined)
+            setNotice('Offline AI model is ready.')
+          })
+          .catch((caught) => {
+            setModelDownload(undefined)
+            setModelDownloadError(errorMessage(caught))
+          })
+      })
+      return () => {
+        unsubscribe()
+        unsubscribeModel()
+      }
     }
     return undefined
   }, [])
@@ -764,6 +787,11 @@ function App() {
     setStatus('decoding')
     setProgress({ status: 'Ses hazirlaniyor', progress: 0 })
     try {
+      if (window.captionStudio) {
+        setStatus('loading-model')
+        setProgress({ status: 'Preparing offline AI model', progress: 0 })
+        await window.captionStudio.ensureLocalModel()
+      }
       const audio = await decodeProjectAudio(target)
       assertTranscriptionRun(runId, target.id)
       setStatus('loading-model')
@@ -1120,6 +1148,8 @@ function App() {
         onSavePreset={openSettingsPresetDialog}
         onExport={() => setActiveTool('export')}
       />
+      {modelDownload ? <ModelDownloadNotice progress={modelDownload} /> : null}
+      {modelDownloadError ? <div className="model-download-error">Model download failed: {modelDownloadError}</div> : null}
       <div className="editor-workspace">
         <ToolRail active={activeTool} hasProject={Boolean(project)} onSelect={setActiveTool} />
         <Inspector
@@ -1266,6 +1296,19 @@ function App() {
           if (file) void file.text().then(applySrt)
         }}
       />
+    </div>
+  )
+}
+
+function ModelDownloadNotice({ progress }: { progress: LocalModelDownloadProgress }) {
+  const fileProgress = progress.totalBytes ? Math.min(1, progress.loadedBytes / progress.totalBytes) : 0
+  const overallProgress = (progress.completedFiles + fileProgress) / Math.max(1, progress.totalFiles)
+  const filename = progress.file === 'starting' ? 'Preparing offline AI model' : progress.file === 'complete' ? 'Offline AI model ready' : `Downloading ${progress.file.split('/').at(-1)}`
+  return (
+    <div className="model-download-notice" role="status">
+      <Loader2 size={15} className="spin" />
+      <div><strong>{filename}</strong><progress value={overallProgress} max={1} /></div>
+      <b>{Math.round(overallProgress * 100)}%</b>
     </div>
   )
 }
