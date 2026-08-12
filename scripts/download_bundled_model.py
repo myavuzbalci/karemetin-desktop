@@ -9,7 +9,6 @@ REQUIRED_FILES = [
     "*.json",
     "merges.txt",
     "vocab.json",
-    "onnx/encoder_model_fp16.onnx",
     "onnx/encoder_model_q4.onnx",
     "onnx/decoder_model_merged_q4.onnx",
 ]
