@@ -27,6 +27,7 @@ jobs:
       - name: Install dependencies
         run: |
           npm ci --include=dev
+          node node_modules/electron/install.js
 
       - name: Validate and package
         run: |

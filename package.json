@@ -27,6 +27,7 @@
     "ffprobe-static": "^3.1.0"
   },
   "devDependencies": {
+    "@emnapi/runtime": "^1.11.3",
     "@playwright/test": "^1.61.1",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
