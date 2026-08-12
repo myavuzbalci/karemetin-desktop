@@ -16,7 +16,7 @@ Girdi videosunun yaninda otomatik olarak `kaynak-karemetin` adinda bir cikti kla
 - `kaynak.srt`: zaman kodlu altyazi
 - `kaynak.txt`: duz metin
 - `kaynak.ass`: stil ve kelime animasyonlarini koruyan altyazi
-- `kaynak.captionstudio`: editor icinde yeniden acilabilen proje
+- `kaynak.karemetin`: editor icinde yeniden acilabilen proje
 
 ## Buyuk model
 
@@ -38,10 +38,10 @@ Uygulama icinde kaydettigin `soru cevap` gibi tum ayar presetleri terminalden is
 
 ## Kaydedilmis bir ayari kullanma
 
-Editor icinden daha once kaydettigin bir proje dosyasini (`.captionstudio`) preset olarak verebilirsin. Bu dosyanin altyazi stili, kanvas, transkripsiyon ve export ayarlari yeni videoya uygulanir.
+Editor icinden daha once kaydettigin bir proje dosyasini (`.karemetin`; eski `.captionstudio` dosyalari da desteklenir) preset olarak verebilirsin. Bu dosyanin altyazi stili, kanvas, transkripsiyon ve export ayarlari yeni videoya uygulanir.
 
 ```powershell
-& ".\KareMetin.exe" --caption-cli "--caption-input=C:\Videolar\kaynak.mp4" "--caption-preset=C:\Projeler\soru-cevap.captionstudio"
+& ".\KareMetin.exe" --caption-cli "--caption-input=C:\Videolar\kaynak.mp4" "--caption-preset=C:\Projeler\soru-cevap.karemetin"
 ```
 
 ## Sadece altyazi ve proje dosyalari

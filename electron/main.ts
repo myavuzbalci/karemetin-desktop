@@ -303,7 +303,7 @@ function registerIpc() {
     const result = await dialog.showOpenDialog(mainWindow as BrowserWindow, {
       title: 'KareMetin proje dosyasini ac',
       properties: ['openFile'],
-      filters: [{ name: 'KareMetin projesi', extensions: ['captionstudio', 'json'] }],
+      filters: [{ name: 'KareMetin projesi', extensions: ['karemetin', 'captionstudio', 'json'] }],
     })
     if (result.canceled || !result.filePaths[0]) return undefined
     return { path: result.filePaths[0], contents: await readFile(result.filePaths[0], 'utf8') }

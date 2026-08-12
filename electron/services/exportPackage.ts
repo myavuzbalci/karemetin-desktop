@@ -23,7 +23,7 @@ export async function exportProjectPackage(request: NativeProjectPackageRequest)
       writeFile(path.join(subtitles, `${stem}.srt`), request.srt, 'utf8'),
       writeFile(path.join(subtitles, `${stem}.txt`), request.text, 'utf8'),
       writeFile(path.join(subtitles, `${stem}.ass`), request.ass, 'utf8'),
-      writeFile(path.join(staging, 'project.captionstudio'), request.projectJson, 'utf8'),
+      writeFile(path.join(staging, 'project.karemetin'), request.projectJson, 'utf8'),
       writeFile(path.join(staging, 'project.json'), request.projectJson, 'utf8'),
       writeFile(path.join(staging, 'README.txt'), readme(request), 'utf8'),
     ])
@@ -64,7 +64,7 @@ function readme(request: NativeProjectPackageRequest) {
     'rendered/: son video ciktilari',
     'subtitles/: SRT, TXT ve ASS altyazilari',
     'audio-tracks/: eklenen ses dosyalari',
-    'project.captionstudio: KareMetin icinde tekrar acilabilen proje dosyasi',
+    'project.karemetin: KareMetin icinde tekrar acilabilen proje dosyasi',
     'project.json: insan tarafindan incelenebilen ayni proje verisi',
     '',
     `Proje: ${request.title}`,

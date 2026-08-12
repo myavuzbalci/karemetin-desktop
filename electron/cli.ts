@@ -84,7 +84,7 @@ export async function runCli(options: CliOptions, modelDirectory: string, settin
   const srtPath = path.join(options.outputDirectory, `${stem}.srt`)
   const textPath = path.join(options.outputDirectory, `${stem}.txt`)
   const assPath = path.join(options.outputDirectory, `${stem}.ass`)
-  const projectPath = path.join(options.outputDirectory, `${stem}.captionstudio`)
+  const projectPath = path.join(options.outputDirectory, `${stem}.karemetin`)
   const ass = buildAssDocument({
     chunks: project.chunks,
     style: project.style,
