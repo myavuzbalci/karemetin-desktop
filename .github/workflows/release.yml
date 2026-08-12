@@ -31,7 +31,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          npm ci
+          npm install
           python -m pip install --upgrade pip huggingface_hub
 
       - name: Download the bundled q4 Turbo model
