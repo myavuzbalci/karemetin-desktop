@@ -250,7 +250,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   return <LanguageContext.Provider value={value}>{children}</LanguageContext.Provider>
 }
 
-// oxlint-disable-next-line react(only-export-components) -- exported hook belongs to this provider module.
+// oxlint-disable-next-line react/only-export-components -- exported hook belongs to this provider module.
 export function useLanguage() {
   const context = useContext(LanguageContext)
   if (!context) throw new Error('useLanguage must be used inside LanguageProvider')
@@ -285,7 +285,7 @@ function shouldSkip(element: HTMLElement) {
   return Boolean(element.closest('input, textarea, [contenteditable="true"], [data-user-content], .caption-text, .word-clip, .caption-clip, .word-chip-row, .library-open'))
 }
 
-// oxlint-disable-next-line react(only-export-components) -- pure helper is covered by unit tests.
+// oxlint-disable-next-line react/only-export-components -- pure helper is covered by unit tests.
 export function translateUiText(value: string, language: InterfaceLanguage) {
   const leading = value.match(/^\s*/)?.[0] ?? ''
   const trailing = value.match(/\s*$/)?.[0] ?? ''
